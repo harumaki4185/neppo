@@ -583,7 +583,8 @@ class IPInfoTool {
             ws.onerror = () => {
                 clearTimeout(timeout);
                 
-                fetch(`http://${target}:${port}`, {
+                const httpProtocol = location.protocol === 'https:' ? 'https://' : 'http://';
+                fetch(`${httpProtocol}${target}:${port}`, {
                     method: 'HEAD',
                     mode: 'no-cors',
                     signal: AbortSignal.timeout(3000)
