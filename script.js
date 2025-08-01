@@ -568,7 +568,8 @@ class IPInfoTool {
                 reject(new Error('timeout'));
             }, 5000);
 
-            const ws = new WebSocket(`ws://${target}:${port}`);
+            const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
+            const ws = new WebSocket(`${protocol}${target}:${port}`);
             
             ws.onopen = () => {
                 clearTimeout(timeout);
