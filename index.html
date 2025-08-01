@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネットワーク情報表示ツール（仮名）</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ネットワーク情報表示ツール（仮名）</h1>
+        </header>
+
+        <main>
+            <!-- 検索セクション -->
+            <section class="search-section">
+                <div class="search-container">
+                    <div class="search-group">
+                        <h2>IP検索</h2>
+                        <div class="search-form">
+                            <input 
+                                type="text" 
+                                id="ip-input" 
+                                class="search-input"
+                                placeholder="IPアドレスを入力（空白で自分のIP）" 
+                            />
+                            <button id="search-btn" class="search-btn">検索</button>
+                        </div>
+                    </div>
+                    <div class="search-group">
+                        <h2>ドメイン検索</h2>
+                        <div class="search-form">
+                            <input 
+                                type="text" 
+                                id="domain-input" 
+                                class="search-input"
+                                placeholder="ドメイン名を入力" 
+                            />
+                            <button id="domain-search-btn" class="search-btn">検索</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 情報表示セクション -->
+            <section class="info-section">
+                <div class="info-container">
+                    <!-- IP情報カラム -->
+                    <div class="info-column">
+                        <div class="ip-info">
+                            <h2>IP情報</h2>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>IPアドレス:</label>
+                                    <span id="ip-address">取得中...</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>逆引きDNS (PTR):</label>
+                                    <span id="reverse-dns">取得中...</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>ISP/組織:</label>
+                                    <span id="isp">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>国:</label>
+                                    <span id="country">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>地域:</label>
+                                    <span id="region">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>ipinfo.io URL:</label>
+                                    <span id="ipinfo-url">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- ドメイン情報カラム -->
+                    <div class="info-column">
+                        <div class="domain-info">
+                            <h2>ドメイン情報</h2>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>ドメイン名:</label>
+                                    <span id="domain-name">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>IPアドレス (A):</label>
+                                    <span id="domain-ip">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>IPv6アドレス (AAAA):</label>
+                                    <span id="domain-ipv6">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>メールサーバー (MX):</label>
+                                    <span id="domain-mx">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>ネームサーバー (NS):</label>
+                                    <span id="domain-ns">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>TXTレコード:</label>
+                                    <span id="domain-txt">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DNS伝播チェックセクション -->
+            <section class="dns-propagation-section">
+                <h2>DNS伝播チェック</h2>
+                <div class="propagation-form">
+                    <input 
+                        type="text" 
+                        id="propagation-domain-input" 
+                        class="search-input"
+                        placeholder="ドメイン名を入力" 
+                    />
+                    <select id="record-type-select" class="record-type-select">
+                        <option value="A">A</option>
+                        <option value="AAAA">AAAA</option>
+                        <option value="CNAME">CNAME</option>
+                        <option value="MX">MX</option>
+                        <option value="NS">NS</option>
+                        <option value="TXT">TXT</option>
+                    </select>
+                    <button id="propagation-check-btn" class="search-btn">チェック</button>
+                </div>
+                
+                <div class="propagation-results">
+                    <h3>DNSサーバーでの解決結果</h3>
+                    <div id="propagation-status" class="propagation-status">
+                        チェック結果:
+                    </div>
+                    <div id="propagation-results-grid" class="propagation-grid">
+                        <!-- 初期表示用のDNSサーバー一覧 -->
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇺🇸 US Cloudflare</div>
+                            <div class="server-ip">1.1.1.1</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇯🇵 JP IIJ</div>
+                            <div class="server-ip">202.232.2.16</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇰🇷 KR KT</div>
+                            <div class="server-ip">168.126.63.1</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇸🇬 SG OpenDNS</div>
+                            <div class="server-ip">208.67.222.222</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇦🇺 AU Telstra</div>
+                            <div class="server-ip">139.130.4.5</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇫🇷 FR AdGuard</div>
+                            <div class="server-ip">94.140.14.14</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇩🇪 DE DNS.Watch</div>
+                            <div class="server-ip">84.200.69.80</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇬🇧 GB CleanBrowsing</div>
+                            <div class="server-ip">185.228.168.9</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                        <div class="propagation-result initial-display">
+                            <div class="server-name">🇨🇦 CA Shaw</div>
+                            <div class="server-ip">64.59.144.16</div>
+                            <div class="result-status waiting">待機中</div>
+                            <div class="result-data">チェック開始待ち</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ポートスキャンセクション -->
+            <section class="port-scan-section">
+                <h2>ポートスキャン</h2>
+                <div class="security-warning">
+                    <div class="warning-header">ℹ️ 利用上の注意</div>
+                    <p><strong>プライベートIPアドレスはスキャンできません。</strong>グローバルIPアドレスまたはドメイン名を使用してください。</p>
+                    <p>制限対象: <code>127.x.x.x</code>, <code>10.x.x.x</code>, <code>172.16-31.x.x</code>, <code>192.168.x.x</code>, <code>localhost</code></p>
+                </div>
+                <div class="port-scan-form">
+                    <div class="scan-input-group">
+                        <input 
+                            type="text" 
+                            id="port-scan-target" 
+                            class="search-input"
+                            placeholder="IPアドレスまたはドメイン名を入力" 
+                        />
+                        <button id="port-scan-btn" class="search-btn">スキャン開始</button>
+                    </div>
+                    
+                    <div class="port-options">
+                        <div class="port-preset">
+                            <h3>プリセット（最大5ポート）</h3>
+                            <div class="preset-buttons">
+                                <button class="preset-btn" data-ports="22">SSH</button>
+                                <button class="preset-btn" data-ports="80,443">Web (80,443)</button>
+                                <button class="preset-btn" data-ports="3000">3000</button>
+                                <button class="preset-btn" data-ports="8080">8080</button>
+                            </div>
+                            <div class="security-notice">
+                                ⚠️ セキュリティ配慮により最大5ポートまでスキャン可能
+                            </div>
+                        </div>
+                        
+                        <div class="custom-ports">
+                            <h3>カスタムポート</h3>
+                            <input 
+                                type="text" 
+                                id="custom-ports" 
+                                class="search-input"
+                                placeholder="ポート番号をカンマ区切りで入力 (例: 80,443,22)" 
+                            />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="port-scan-results">
+                    <div id="port-scan-status" class="scan-status">
+                        スキャン結果:
+                    </div>
+                    <div id="port-scan-progress" class="scan-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <div id="progress-text" class="progress-text">0 / 0 ポート完了</div>
+                    </div>
+                    <div id="port-results-grid" class="port-results-grid">
+                        <!-- ポートスキャン結果がここに表示される -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- コントロールセクション -->
+            <section class="controls">
+                <button id="refresh-btn" class="refresh-btn">情報を更新</button>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
